@@ -1,0 +1,23 @@
+project_name: go-batect-permission
+
+containers:
+  build-env:
+    build_directory: ./.batect/golang-build-env
+    volumes:
+      - local: .
+        container: /app
+        options: cached
+      - type: cache
+        name: go-cache
+        container: /go
+    working_directory: /app
+    environment:
+      GOCACHE: /go/cache
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/container-user
+tasks:
+  run:
+    run:
+      container: build-env
+      command: go run /app/cmd
